@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,4 +17,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
     //queue routes
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/transactions', [TransactionController::class, 'store']);
+        Route::get('/transactions/{transactionId}', [TransactionController::class, 'show']);
+        Route::get('/balance', [TransactionController::class, 'balance']);
+    });
 });
