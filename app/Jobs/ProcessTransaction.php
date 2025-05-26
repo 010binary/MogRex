@@ -46,7 +46,7 @@ class ProcessTransaction implements ShouldQueue
                 {
                     $userBalance = UserBalance::create([
                         'user_id' => $transaction->user_id,
-                        'balance' => '0.00'
+                        'balance' => '1000000.00'
                     ]);
                 }
 

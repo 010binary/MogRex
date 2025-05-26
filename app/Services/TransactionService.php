@@ -25,8 +25,14 @@ class TransactionService
         }
 
         return DB::transaction(function () use ($userId, $amount, $type, $idempotencyKey) {
+            // Ensure user has a balance record with default value
+            $userBalance = UserBalance::firstOrCreate(
+                ['user_id' => $userId],
+                ['balance' => '1000000.00']
+            );
+
             // Get current balance for immediate response
-            $currentBalance = UserBalance::getBalanceForUser($userId);
+            $currentBalance = $userBalance->balance;
 
             // Calculate what the new balance would be (for response only)
             $estimatedNewBalance = $type === 'credit'
@@ -41,7 +47,7 @@ class TransactionService
                 'status' => 'pending',
                 'idempotency_key' => $idempotencyKey,
                 'previous_balance' => $currentBalance,
-                'current_balance' => $estimatedNewBalance, // This will be updated when actually processed
+                'current_balance' => $estimatedNewBalance,
             ]);
 
             // Dispatch job for background processing
@@ -58,6 +64,12 @@ class TransactionService
 
     public function getUserBalance(int $userId): string
     {
-        return UserBalance::getBalanceForUser($userId);
+        // Ensure user has a balance record with default value
+        $userBalance = UserBalance::firstOrCreate(
+            ['user_id' => $userId],
+            ['balance' => '1000000.00']
+        );
+
+        return $userBalance->balance;
     }
 }
