@@ -1,5 +1,5 @@
 <?php
-
+// app/Models/Transaction.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +38,7 @@ class Transaction extends Model
         return $this->belongsTo(User::class);
     }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 

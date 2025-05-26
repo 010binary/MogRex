@@ -12,8 +12,7 @@ class TransactionController extends Controller
 {
     public function __construct(
         private TransactionService $transactionService
-    ) {
-    }
+    ) {}
 
     public function store(Request $request): JsonResponse
     {
@@ -22,8 +21,7 @@ class TransactionController extends Controller
             'type' => 'required|in:credit,debit',
         ]);
 
-        if ($validator->fails())
-        {
+        if ($validator->fails()) {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
@@ -31,8 +29,7 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        try
-        {
+        try {
             $user = $request->user();
             $idempotencyKey = $request->header('Idempotency-Key');
 
@@ -51,8 +48,7 @@ class TransactionController extends Controller
                 'current_balance' => number_format($transaction->current_balance, 2),
                 'status' => $transaction->status
             ], 201);
-        } catch (\Exception $e)
-        {
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create transaction',
@@ -65,8 +61,7 @@ class TransactionController extends Controller
     {
         $transaction = $this->transactionService->getTransactionStatus($transactionId);
 
-        if (! $transaction)
-        {
+        if (!$transaction) {
             return response()->json([
                 'success' => false,
                 'message' => 'Transaction not found'
@@ -74,8 +69,7 @@ class TransactionController extends Controller
         }
 
         // Ensure user can only see their own transactions
-        if ($transaction->user_id !== $request->user()->id)
-        {
+        if ($transaction->user_id !== $request->user()->id) {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -96,6 +90,103 @@ class TransactionController extends Controller
                 'updated_at' => $transaction->updated_at,
             ]
         ]);
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'nullable|in:pending,processed,failed',
+            'type' => 'nullable|in:credit,debit',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'page' => 'nullable|integer|min:1',
+            'from_date' => 'nullable|date',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'sort_by' => 'nullable|in:created_at,amount,status',
+            'sort_order' => 'nullable|in:asc,desc'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $user = $request->user();
+            $perPage = $request->get('per_page', 15);
+            $sortBy = $request->get('sort_by', 'created_at');
+            $sortOrder = $request->get('sort_order', 'desc');
+
+            // Build query for user's transactions
+            $query = Transaction::where('user_id', $user->id);
+
+            // Apply filters
+            if ($request->has('status')) {
+                $query->where('status', $request->status);
+            }
+
+            if ($request->has('type')) {
+                $query->where('type', $request->type);
+            }
+
+            if ($request->has('from_date')) {
+                $query->whereDate('created_at', '>=', $request->from_date);
+            }
+
+            if ($request->has('to_date')) {
+                $query->whereDate('created_at', '<=', $request->to_date);
+            }
+
+            // Apply sorting
+            $query->orderBy($sortBy, $sortOrder);
+
+            // Paginate results
+            $transactions = $query->paginate($perPage);
+
+            // Format the response
+            $formattedTransactions = $transactions->getCollection()->map(function ($transaction) {
+                return [
+                    'transaction_id' => $transaction->transaction_id,
+                    'amount' => number_format($transaction->amount, 2),
+                    'type' => $transaction->type,
+                    'status' => $transaction->status,
+                    'previous_balance' => $transaction->previous_balance ? number_format($transaction->previous_balance, 2) : null,
+                    'current_balance' => $transaction->current_balance ? number_format($transaction->current_balance, 2) : null,
+                    'failure_reason' => $transaction->failure_reason,
+                    'created_at' => $transaction->created_at,
+                    'updated_at' => $transaction->updated_at,
+                ];
+            });
+
+            return response()->json([
+                'success' => true,
+                'data' => $formattedTransactions,
+                'pagination' => [
+                    'current_page' => $transactions->currentPage(),
+                    'per_page' => $transactions->perPage(),
+                    'total' => $transactions->total(),
+                    'last_page' => $transactions->lastPage(),
+                    'from' => $transactions->firstItem(),
+                    'to' => $transactions->lastItem(),
+                ],
+                'filters_applied' => [
+                    'status' => $request->status,
+                    'type' => $request->type,
+                    'from_date' => $request->from_date,
+                    'to_date' => $request->to_date,
+                    'sort_by' => $sortBy,
+                    'sort_order' => $sortOrder,
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve transactions',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function balance(Request $request): JsonResponse

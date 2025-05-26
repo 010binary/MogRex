@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('user_balances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('balance', 15, 2)->default(0.00);
+            $table->decimal('balance', 15, 2)->default(1000000.00);
             $table->timestamps();
 
             $table->unique(['user_id'], 'unique_user_balance');
