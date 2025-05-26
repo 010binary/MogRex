@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"example1@gmail.com\",\n    \"password\": \"123456789A\",\n    \"password_confirmation\": \"123456789A\"\n}",
+							"raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"email\": \"example5@gmail.com\",\n    \"password\": \"123456789A\",\n    \"password_confirmation\": \"123456789A\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -30,15 +30,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/register",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/register",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -69,15 +67,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/login",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/login",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -93,6 +89,16 @@
 						"disableBodyPruning": true
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "4|Z1GunsEWnLy0AmltXsorOgkz4DBcnKYeGsWt9nvKdff48155",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -111,15 +117,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/user",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/user",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"user"
@@ -159,15 +163,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/logout",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/logout",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -222,6 +224,16 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "4|Z1GunsEWnLy0AmltXsorOgkz4DBcnKYeGsWt9nvKdff48155",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -245,15 +257,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/transactions",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/transactions",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -272,6 +282,16 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "4|Z1GunsEWnLy0AmltXsorOgkz4DBcnKYeGsWt9nvKdff48155",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -295,15 +315,13 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/balance",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/balance",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -321,6 +339,16 @@
 						}
 					},
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "4|Z1GunsEWnLy0AmltXsorOgkz4DBcnKYeGsWt9nvKdff48155",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -335,15 +363,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/transactions",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/transactions",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -418,15 +444,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/transactions?status=processed&type=credit&sort_order=desc",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/transactions?status=processed&type=credit&sort_order=desc",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -462,15 +486,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/transactions?from_date=2024-04-01&to_date=2024-04-30&per_page=20&page=1",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/transactions?from_date=2024-04-01&to_date=2024-04-30&per_page=20&page=1",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
@@ -510,15 +532,13 @@
 							}
 						],
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/transactions?status=failed&sort_by=amount&sort_order=desc",
-							"protocol": "http",
+							"raw": "https://mogrex-assessment.onrender.com/api/v1/transactions?status=failed&sort_by=amount&sort_order=desc",
+							"protocol": "https",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"mogrex-assessment",
+								"onrender",
+								"com"
 							],
-							"port": "8000",
 							"path": [
 								"api",
 								"v1",
