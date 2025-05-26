@@ -42,7 +42,8 @@
 								"v1",
 								"register"
 							]
-						}
+						},
+						"description": "### Register User\n\nCreates a new user account and returns authentication details.\n\n**Endpoint:** `POST /api/v1/register`\n\n**Headers:**\n\n```\nAccept: application/json\nContent-Type: application/json\n\n ```\n\n**Request Body:**\n\n```\njson{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"123456789A\",\n    \"password_confirmation\": \"123456789A\"\n}\n\n ```\n\n**Success Response:** `201 Created`\n\n```\njson{\n    \"message\": \"User registered successfully\",\n    \"user\": {\n        \"id\": 1,\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@example.com\"\n    },\n    \"token\": \"1|AbCdEf123456...\"\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -79,7 +80,8 @@
 								"v1",
 								"login"
 							]
-						}
+						},
+						"description": "### Login User\n\nAuthenticates a user and returns an access token.\n\n**Endpoint:** `POST /api/v1/login`\n\n**Headers:**\n\n```\nAccept: application/json\nContent-Type: application/json\n\n ```\n\n**Request Body:**\n\n```\njson{\n    \"email\": \"john.doe@example.com\",\n    \"password\": \"123456789A\"\n}\n\n ```\n\n**Success Response:** `200 OK`\n\n```\njson{\n    \"message\": \"Login successful\",\n    \"token\": \"1|AbCdEf123456...\",\n    \"user\": {\n        \"id\": 1,\n        \"name\": \"John Doe\",\n        \"email\": \"john.doe@example.com\"\n    }\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -128,7 +130,8 @@
 								"api",
 								"user"
 							]
-						}
+						},
+						"description": "### Get User Profile\n\nRetrieves the authenticated user's profile information.\n\n**Endpoint:** `GET /api/user`\n\n**Headers:**\n\n```\nAccept: application/json\nAuthorization: Bearer {token}\n\n ```\n\n**Success Response:** `200 OK`\n\n```\njson{\n    \"id\": 1,\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\",\n    \"email_verified_at\": null,\n    \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n    \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -175,7 +178,8 @@
 								"v1",
 								"logout"
 							]
-						}
+						},
+						"description": "### Logout User\n\nInvalidates the current authentication token.\n\n**Endpoint:** `POST /api/v1/logout`\n\n**Headers:**\n\n```\nAccept: application/json\nAuthorization: Bearer {token}\n\n ```\n\n**Success Response:** `200 OK`\n\n```\njson{\n    \"message\": \"Logged out successfully\"\n}\n\n ```"
 					},
 					"response": []
 				}
@@ -269,7 +273,8 @@
 								"v1",
 								"transactions"
 							]
-						}
+						},
+						"description": "### Create Transaction\n\nCreates a new credit or debit transaction. Supports idempotency to prevent duplicate transactions.\n\n**Endpoint:** `POST /api/v1/transactions`\n\n**Headers:**\n\n```\nAccept: application/json\nAuthorization: Bearer {token}\nIdempotency-Key: {unique-key}\nContent-Type: application/json\n\n ```\n\n**Request Body:**\n\n```\njson{\n    \"amount\": 1000.00,\n    \"type\": \"credit\"\n}\n\n ```\n\n**Parameters:**\n\n- `amount` (number, required): Transaction amount (positive number)\n    \n- `type` (string, required): Transaction type - either \"credit\" or \"debit\"\n    \n\n**Success Response:** `201 Created`\n\n```\njson{\n    \"message\": \"Transaction created successfully\",\n    \"transaction\": {\n        \"id\": \"TXN-ABC123DEF456\",\n        \"amount\": 1000.00,\n        \"type\": \"credit\",\n        \"status\": \"pending\",\n        \"user_id\": 1,\n        \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n        \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n    }\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -327,7 +332,8 @@
 								"v1",
 								"balance"
 							]
-						}
+						},
+						"description": "### Get User Balance\n\nRetrieves the current balance for the authenticated user.\n\n**Endpoint:** `GET /api/v1/balance`\n\n**Headers:**\n\n```\nAccept: application/json\nAuthorization: Bearer {token}\n\n ```\n\n**Success Response:** `200 OK`\n\n```\njson{\n    \"balance\": 5000.00,\n    \"currency\": \"USD\",\n    \"last_updated\": \"2024-01-15T10:30:00.000000Z\"\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -375,7 +381,8 @@
 								"v1",
 								"transactions"
 							]
-						}
+						},
+						"description": "### List All Transactions\n\nRetrieves all transactions for the authenticated user with optional filtering and pagination.\n\n**Endpoint:** `GET /api/v1/transactions`\n\n**Headers:**\n\n```\nAccept: application/json\nAuthorization: Bearer {token}\n\n ```\n\n**Query Parameters:**\n\n- `status` (string, optional): Filter by status - \"pending\", \"processed\", \"failed\"\n    \n- `type` (string, optional): Filter by type - \"credit\", \"debit\"\n    \n- `from_date` (date, optional): Filter from date (YYYY-MM-DD format)\n    \n- `to_date` (date, optional): Filter to date (YYYY-MM-DD format)\n    \n- `sort_by` (string, optional): Sort by field - \"amount\", \"created_at\"\n    \n- `sort_order` (string, optional): Sort order - \"asc\", \"desc\"\n    \n- `page` (integer, optional): Page number for pagination\n    \n- `per_page` (integer, optional): Number of items per page\n    \n\n**Success Response:** `200 OK`\n\n```\njson{\n    \"data\": [\n        {\n            \"id\": \"TXN-ABC123DEF456\",\n            \"amount\": 1000.00,\n            \"type\": \"credit\",\n            \"status\": \"processed\",\n            \"user_id\": 1,\n            \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n            \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"per_page\": 15,\n        \"total\": 25,\n        \"last_page\": 2\n    }\n}\n\n ```"
 					},
 					"response": []
 				},
@@ -418,7 +425,8 @@
 								"transactions",
 								"TXN-I7NKDHCN7OP6"
 							]
-						}
+						},
+						"description": "### Get Transaction by ID\n\nRetrieves a specific transaction by its unique identifier.\n\n**Endpoint:** `GET /api/v1/transactions/{transaction_id}`\n\n**Headers:**\n\n```\nAccept: application/json\nAuthorization: Bearer {token}\n\n ```\n\n**Path Parameters:**\n\n- `transaction_id` (string, required): The unique transaction identifier\n    \n\n**Success Response:** `200 OK`\n\n```\njson{\n    \"id\": \"TXN-ABC123DEF456\",\n    \"amount\": 1000.00,\n    \"type\": \"credit\",\n    \"status\": \"processed\",\n    \"user_id\": 1,\n    \"created_at\": \"2024-01-15T10:30:00.000000Z\",\n    \"updated_at\": \"2024-01-15T10:30:00.000000Z\"\n}\n\n ```"
 					},
 					"response": []
 				},
