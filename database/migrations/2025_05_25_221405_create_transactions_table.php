@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('transaction_id')->unique();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 15, 2);
-            $table->enum('type', ['credit', 'debit']);
-            $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
+            $table->string('type');
+            $table->string('status')->default('pending');
             $table->decimal('previous_balance', 15, 2)->nullable();
             $table->decimal('current_balance', 15, 2)->nullable();
             $table->text('failure_reason')->nullable();
