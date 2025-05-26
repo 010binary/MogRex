@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 use App\Services\TransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,7 +13,8 @@ class TransactionController extends Controller
 {
     public function __construct(
         private TransactionService $transactionService
-    ) {}
+    ) {
+    }
 
     public function store(Request $request): JsonResponse
     {
@@ -21,7 +23,8 @@ class TransactionController extends Controller
             'type' => 'required|in:credit,debit',
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails())
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
@@ -29,7 +32,8 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        try {
+        try
+        {
             $user = $request->user();
             $idempotencyKey = $request->header('Idempotency-Key');
 
@@ -48,7 +52,8 @@ class TransactionController extends Controller
                 'current_balance' => number_format($transaction->current_balance, 2),
                 'status' => $transaction->status
             ], 201);
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create transaction',
@@ -61,7 +66,8 @@ class TransactionController extends Controller
     {
         $transaction = $this->transactionService->getTransactionStatus($transactionId);
 
-        if (!$transaction) {
+        if (! $transaction)
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Transaction not found'
@@ -69,7 +75,8 @@ class TransactionController extends Controller
         }
 
         // Ensure user can only see their own transactions
-        if ($transaction->user_id !== $request->user()->id) {
+        if ($transaction->user_id !== $request->user()->id)
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Unauthorized'
@@ -105,7 +112,8 @@ class TransactionController extends Controller
             'sort_order' => 'nullable|in:asc,desc'
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails())
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Validation failed',
@@ -113,7 +121,8 @@ class TransactionController extends Controller
             ], 422);
         }
 
-        try {
+        try
+        {
             $user = $request->user();
             $perPage = $request->get('per_page', 15);
             $sortBy = $request->get('sort_by', 'created_at');
@@ -123,19 +132,23 @@ class TransactionController extends Controller
             $query = Transaction::where('user_id', $user->id);
 
             // Apply filters
-            if ($request->has('status')) {
+            if ($request->has('status'))
+            {
                 $query->where('status', $request->status);
             }
 
-            if ($request->has('type')) {
+            if ($request->has('type'))
+            {
                 $query->where('type', $request->type);
             }
 
-            if ($request->has('from_date')) {
+            if ($request->has('from_date'))
+            {
                 $query->whereDate('created_at', '>=', $request->from_date);
             }
 
-            if ($request->has('to_date')) {
+            if ($request->has('to_date'))
+            {
                 $query->whereDate('created_at', '<=', $request->to_date);
             }
 
@@ -180,7 +193,8 @@ class TransactionController extends Controller
                     'sort_order' => $sortOrder,
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (\Exception $e)
+        {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve transactions',
